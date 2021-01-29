@@ -6,10 +6,10 @@ const Nav = (props) => {
     <>
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          {`${user.firstName} ${user.lastName} \n ${user.businessUnit}`}
+          {`${user.email}`}
         </li>
         <li className="nav-item">
-        <Link to='/dashboard'> Dashboard </Link>
+        <Link to='/'> Home </Link>
         </li>
         <li className="nav-item">
           <Link to='' onClick={props.handleLogout} > Logout </Link>

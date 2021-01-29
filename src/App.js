@@ -1,50 +1,49 @@
-import './App.css';
-import { useState } from 'react';
-import { getUser, logout } from './services/userService';
-import Nav from './Components/Nav/Nav';
 import { Switch, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-import LoginPage from './pages/LoginPage/LoginPage';
-import SignupPage from './pages/SignupPage/SignupPage';
-import HomePage from './pages/HomePage/HomePage';
+import { auth } from './services/firebase';
+
+import Nav from './components/Nav';
+import NotFound from './components/NotFound';
+
+import HomePage from './pages/HomePage';
+import SignupPage from './pages/SignupPage';
+import LoginPage from './pages/LoginPage';
+
+import './App.css';
 
 
 function App(props) {
 
-  /* component state */
-  const [userState, setUserState] = useState({ user: getUser() });
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(
+      user => setUserState({ user })
+    );
+    return () => unsubscribe();
+  }, []);
 
-  /* helper functions */
-
-  function handleSignupOrLogin() {
-    // place user into state using the setter function
-    setUserState({ user: getUser() });
-    // programmatically route user to dashboard
-  }
-
-  function handleLogout() {
-    logout();
-    setUserState({ user: null });
-  }
+  const [ userState, setUserState ] = useState({
+    user: null
+  });
 
   return (
     <div className="App">
-      <Nav user={userState.user} handleLogout={handleLogout} />
+      <Nav />
       <Switch>
-        <Route exact path="/" render={(props) => <HomePage />} />
-
+        <Route 
+        exact path="/" 
+        render={(props) => 
+        <HomePage user={userState.user} />} 
+        />
         <Route
           exact path="/signup"
-          render={(props) => (
-            <SignupPage handleSignupOrLogin={handleSignupOrLogin} />
-          )}
-        />
+          render={(props) => ( <SignupPage /> )}
+        /> 
         <Route
           exact path="/login"
-          render={(props) => (
-            <LoginPage handleSignupOrLogin={handleSignupOrLogin} />
-          )}
+          render={(props) => ( <LoginPage /> )}
         />
+        <Route component={NotFound} />
         </Switch>
     </div>
   );
