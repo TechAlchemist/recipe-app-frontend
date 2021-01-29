@@ -1,23 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import { getUser, logout } from './services/userService';
+import Nav from './Components/Nav/Nav';
+import { Switch, Route } from 'react-router-dom';
 
-function App() {
+import LoginPage from './pages/LoginPage/LoginPage';
+import SignupPage from './pages/SignupPage/SignupPage';
+import HomePage from './pages/HomePage/HomePage';
+
+
+function App(props) {
+
+  /* component state */
+  const [userState, setUserState] = useState({ user: getUser() });
+
+  /* helper functions */
+
+  function handleSignupOrLogin() {
+    // place user into state using the setter function
+    setUserState({ user: getUser() });
+    // programmatically route user to dashboard
+  }
+
+  function handleLogout() {
+    logout();
+    setUserState({ user: null });
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Nav user={userState.user} handleLogout={handleLogout} />
+      <Switch>
+        <Route exact path="/" render={(props) => <HomePage />} />
+
+        <Route
+          exact path="/signup"
+          render={(props) => (
+            <SignupPage handleSignupOrLogin={handleSignupOrLogin} />
+          )}
+        />
+        <Route
+          exact path="/login"
+          render={(props) => (
+            <LoginPage handleSignupOrLogin={handleSignupOrLogin} />
+          )}
+        />
+        </Switch>
     </div>
   );
 }
