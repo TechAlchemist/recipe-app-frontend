@@ -28,20 +28,20 @@ function App(props) {
 
   return (
     <div className="App">
-      <Nav />
+      <Nav user={userState.user} />
       <Switch>
         <Route 
         exact path="/" 
         render={(props) => 
-        <HomePage user={userState.user} />} 
+        <HomePage user={userState.user} {...props} />} 
         />
         <Route
           exact path="/signup"
-          render={(props) => ( <SignupPage /> )}
+          render={(props) => ( <SignupPage {...props} /> )}
         /> 
         <Route
           exact path="/login"
-          render={(props) => ( <LoginPage /> )}
+          render={(props) => ( <LoginPage {...props} /> )}
         />
         <Route component={NotFound} />
         </Switch>

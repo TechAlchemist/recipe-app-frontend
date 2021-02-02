@@ -27,6 +27,7 @@ function SignupPage(props) {
     function handleSubmit(e) {
         e.preventDefault();
         createAccountWithEmail(formState.email, formState.password);
+        props.history.push('/');
     }
 
     return (

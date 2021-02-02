@@ -43,8 +43,9 @@ function createAccountWithEmail(email, password) {
     console.log('Creating Account. ');
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      var user = userCredential.user;
-      console.log(user + ' logged in.');
+        var user = userCredential.user;
+        console.log( JSON.stringify(user) + ' logged in.');
+        return user;
     })
     .catch((error) => {
       var errorCode = error.code;

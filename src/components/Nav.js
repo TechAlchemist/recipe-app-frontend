@@ -1,42 +1,47 @@
 import { Link } from 'react-router-dom';
+import { logout } from '../services/firebase';
 
-const Nav = (props) => {
-  const user = props.user;
-  let nav = props.user ?
-    <>
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          {`${user.email}`}
-        </li>
-        <li className="nav-item">
-        <Link to='/'> Home </Link>
-        </li>
-        <li className="nav-item">
-          <Link to='' onClick={props.handleLogout} > Logout </Link>
-        </li>
-      </ul>
-    </>
-    :
-    <>
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link to='/login'> Login </Link>
-        </li>
+const Nav = ({ user }) => {
 
-        <li className="nav-item">
-          <Link to='/signup'> Signup </Link>
-        </li>
-      </ul>
+  function handleLogout(event) {
+    event.preventDefault();
+    logout();
+  }
+
+  const loggedIn = (
+    <> 
+      <h1> { user ? user.email : "-" } is logged in. </h1>
+      <li>
+        <Link to="" onClick={handleLogout} > Logout </Link>
+      </li>
     </>
+  );
+
+  const unauthedUser = (
+     <>
+      <li>
+        <Link to='/login'> Login </Link>
+      </li>
+      <li>
+        <Link to='/signup'> Signup </Link>
+      </li>
+     </>
+  );
 
   return (
-    <>
-     <nav className="navbar navbar-expand-lg navbar-light bg-dark">
-      <a className="navbar-brand" href="/">
-      </a>
-      {nav}
+    
+     <nav>
+        <ul>
+        {
+          user 
+          ?
+          loggedIn
+          :
+          unauthedUser
+        }
+        </ul>
      </nav>
-    </>
+
   );
 };
 
